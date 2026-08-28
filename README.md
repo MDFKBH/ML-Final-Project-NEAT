@@ -4,7 +4,7 @@ A **fork of [NeuralNine/ai-car-simulation](https://github.com/NeuralNine/ai-car-
 
 **Presentation:** [*Vehicle Route Optimization* — final presentation slides](https://drive.google.com/drive/folders/1FK7mEH16lqAlgYZqKUG-sjISO-0odVCx?usp=sharing) (26 slides, Google Drive)
 
-**Team:** 黃少鯤 (S12350302) · 黃睿廷 (S12350304) · 黃子修 (S12350312) · 鄭聿宏 (S12350313) · 蔡承赫 (S12350318)
+**Team:** 黃少鯤 · 黃睿廷 · 黃子修 · 鄭聿宏 · 蔡承赫
 
 > **Scope, stated plainly.** The simulation, the radar sensing, the collision logic and the NEAT wiring are all upstream code, not ours. What follows is limited to what we changed and what we measured. Every change listed below is visible in the diff against the fork point:
 > ```
@@ -19,7 +19,7 @@ We ran the upstream default configuration on `map1`–`map5`. It learned the fir
 
 ### The problem
 
-Terminal output from those five runs is in [`pic/`](pic) — one screenshot per track, all under the upstream defaults. Read side by side, `map5` is not merely slower, it is a different regime:
+Terminal output from those five runs is in [`pic/`](pic), one screenshot per track, all under the upstream defaults. Read side by side, `map5` is not merely slower — it is a different regime:
 
 | Track | Generation | Best fitness | Species |
 |---|---|---|---|
@@ -31,7 +31,21 @@ Terminal output from those five runs is in [`pic/`](pic) — one screenshot per 
 
 Four tracks reach 240k–373k within 24 generations. `map5` is still at 8,550 after 246 — roughly **30× lower fitness after 10× more generations.**
 
-*(These are snapshots taken while each run was in progress, not converged final scores. `pic/mapN.png` is the terminal output for the run on track `mapN.png`, not a picture of the track.)*
+![map5 under the upstream defaults: best fitness 8,550 at generation 246, top species stagnant for 222 generations](pic/map5_fail.png)
+
+The `stag` column is the diagnosis. The leading species had gone 222 generations without improving, so the population had converged and further generations would not have helped.
+
+<details>
+<summary>Terminal output for the four tracks that did work (map1–map4)</summary>
+
+| | |
+|---|---|
+| ![map1](pic/map1.png) | ![map2](pic/map2.png) |
+| ![map3](pic/map3.png) | ![map4](pic/map4.png) |
+
+</details>
+
+*(These are snapshots taken while each run was in progress, not converged final scores. `pic/mapN.png` is the terminal output for the run on track `mapN.png`, not a picture of the track itself.)*
 
 ### The fix
 
@@ -45,15 +59,15 @@ Four tracks reach 240k–373k within 24 generations. `map5` is still at 8,550 af
 | Species tied at the best score | 1 of 2 | 4 of 7 |
 | Wall-clock per generation | 4.3 s | 86.3 s |
 
-Three things are worth reading off that table beyond the headline number.
+![map5 under our configuration: best fitness 1,080,300 at generation 69, with four of seven species tied at that score](pic/map5_solved.png)
 
-The defaults did not fail for want of time: by generation 246 the leading species had gone **222 consecutive generations without improving**. The population had converged and stopped exploring, and running it longer would not have helped.
+Two things in that screenshot matter as much as the headline number.
 
-Under our configuration the gain is not one lucky genome — **four of seven species reach the same top score**, so several independent lineages found a solution.
+The gain is **not one lucky genome**: four of the seven species reach the same top score of 1,080,300, so several independent lineages found a solution rather than one outlier carrying the run.
 
-And generation time rises from 4.3 s to 86.3 s. A generation ends when every car has crashed, so a twentyfold increase in wall-clock time is itself the measurement: the cars stopped crashing early and started surviving most of the episode.
+And generation time rises from 4.3 s to 86.3 s. A generation ends once every car has crashed, so a twentyfold increase in wall-clock time is itself a measurement: the cars stopped dying early and started surviving most of the episode.
 
-Screenshots of both `map5` runs are on slides 19–20 of the presentation.
+*(`pic/map5_solved.png` is taken from slide 20 of the presentation; `pic/map5_fail.png` is the corresponding run under the defaults, slide 19.)*
 
 ---
 
