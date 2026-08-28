@@ -3,3 +3,6 @@ tempCodeRunnerFile.py
 
 __pycache__/
 *.pyc
+
+# Slides live on Google Drive, linked from the README
+*.pdf
