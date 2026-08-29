@@ -138,7 +138,7 @@ These are unresolved problems in the current code, listed so that anyone reading
 
 ## Follow-up work
 
-This project was extended the following semester into a Deep Learning capstone that rebuilds the same environment as a Gymnasium environment trained with PPO, and runs a controlled ablation over reward and observation design: **[DL-Final-AI-car-RL](https://github.com/h-s-i-u/DL-Final-AI-car-RL)**.
+This project was extended the following semester into a Deep Learning capstone that rebuilds the same environment as a Gymnasium environment trained with PPO, and runs a controlled ablation over reward and observation design: **[rl-car-reward-vs-observation](https://github.com/h-s-i-u/rl-car-reward-vs-observation)**.
 
 ---
 
