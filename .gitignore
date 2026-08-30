@@ -6,3 +6,6 @@ __pycache__/
 
 # Slides live on Google Drive, linked from the README
 *.pdf
+
+# Personal working notes, not part of the project
+note.md
